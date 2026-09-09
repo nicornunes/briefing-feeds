@@ -51,8 +51,6 @@ SOURCES = [
     {"id": "yahoo_finance","section": "mundo",          "url": "https://finance.yahoo.com/news/rssindex"},
     # Oficiais
     {"id": "fed",          "section": "oficiais",       "url": "https://www.federalreserve.gov/feeds/press_all.xml"},
-    {"id": "fazenda",      "section": "oficiais",       "url": "https://news.google.com/rss/search?q=site:gov.br/fazenda&hl=pt-BR&gl=BR&ceid=BR:pt-419
-"},
     {"id": "cvm",          "section": "oficiais",       "url": "https://www.gov.br/cvm/pt-br/assuntos/noticias/RSS"},
     {"id": "ecb",          "section": "oficiais",       "url": "https://www.ecb.europa.eu/rss/press.html"},
     {"id": "world_bank",   "section": "oficiais",       "url": "https://www.worldbank.org/en/news/all?format=rss"},
