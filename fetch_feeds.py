@@ -42,7 +42,7 @@ SOURCES = [
     # Brasil — mercado
     {"id": "valor",        "section": "brasil_mercado", "url": "https://pox.globo.com/rss/valor"},
     {"id": "infomoney",    "section": "brasil_mercado", "url": "https://www.infomoney.com.br/feed/"},
-    {"id": "exame_economia","section": "brasil_mercado","url": "https://exame.com/economia/feed/"},
+    {"id": "exame_economia","section": "brasil_mercado","url": "https://exame.com/feed/"},
     # Brasil geral & mundo
     {"id": "cnn_brasil",   "section": "brasil_geral",   "url": "https://www.cnnbrasil.com.br/feed/"},
     {"id": "g1",           "section": "brasil_geral",   "url": "https://g1.globo.com/rss/g1/"},
@@ -51,7 +51,8 @@ SOURCES = [
     {"id": "yahoo_finance","section": "mundo",          "url": "https://finance.yahoo.com/news/rssindex"},
     # Oficiais
     {"id": "fed",          "section": "oficiais",       "url": "https://www.federalreserve.gov/feeds/press_all.xml"},
-    {"id": "fazenda",      "section": "oficiais",       "url": "https://www.gov.br/fazenda/pt-br/assuntos/noticias/RSS"},
+    {"id": "fazenda",      "section": "oficiais",       "url": "https://news.google.com/rss/search?q=site:gov.br/fazenda&hl=pt-BR&gl=BR&ceid=BR:pt-419
+"},
     {"id": "cvm",          "section": "oficiais",       "url": "https://www.gov.br/cvm/pt-br/assuntos/noticias/RSS"},
     {"id": "ecb",          "section": "oficiais",       "url": "https://www.ecb.europa.eu/rss/press.html"},
     {"id": "world_bank",   "section": "oficiais",       "url": "https://www.worldbank.org/en/news/all?format=rss"},
