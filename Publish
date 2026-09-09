@@ -1,0 +1,81 @@
+# Como publicar no seu GitHub (Pro)
+
+Você faz o push logado na sua própria conta. **Não** cole token nem senha aqui —
+autentique com seu login normal do GitHub, o `gh` CLI ou SSH.
+
+Descompacte o zip primeiro. Você terá:
+
+```
+fetch_feeds.py
+requirements.txt
+README.md
+BRIEFING_INTEGRATION.md
+PUBLISH.md
+.gitignore
+.github/workflows/briefing-feeds.yml
+```
+
+Escolha UM dos dois caminhos abaixo.
+
+---
+
+## Opção A — Terminal (recomendado)
+
+Na pasta descompactada:
+
+```bash
+git init
+git add .
+git commit -m "briefing feeds collector"
+git branch -M main
+# crie o repo e faça o push. Duas formas:
+
+# A1) com o GitHub CLI (mais fácil — ele cria o repo e já faz o push):
+gh repo create briefing-feeds --private --source=. --push
+
+# A2) manual: crie um repo vazio em github.com/new (nome: briefing-feeds),
+#     depois:
+git remote add origin https://github.com/<SEU_USUARIO>/briefing-feeds.git
+git push -u origin main
+```
+
+---
+
+## Opção B — Upload pela web
+
+1. Crie um repo **privado** em <https://github.com/new> (nome: `briefing-feeds`).
+2. Na página do repo, **Add file → Upload files**, e arraste
+   `fetch_feeds.py`, `requirements.txt`, `README.md`, `BRIEFING_INTEGRATION.md`,
+   `PUBLISH.md` e `.gitignore`. Commit.
+3. O arquivo dentro de `.github/workflows/` é chato de arrastar (pasta oculta).
+   Faça assim: **Add file → Create new file** e, no campo do nome, digite
+   exatamente:
+
+   ```
+   .github/workflows/briefing-feeds.yml
+   ```
+
+   (ao digitar `/`, o GitHub cria as pastas). Cole o conteúdo do arquivo e commit.
+
+---
+
+## Primeira rodada (gera o feeds.json)
+
+1. Abra a aba **Actions** do repo. Se pedir, clique em **I understand my
+   workflows, enable them**.
+2. Selecione o workflow **briefing-feeds** → **Run workflow** (isso é o
+   `workflow_dispatch`). Rode na branch `main`.
+3. Quando terminar, abra o log do run e cheque o resumo do `fetch_feeds.py`:
+   - linhas `FAIL <fonte>` no log = feed com URL a corrigir;
+   - o `feeds.json` commitado tem um bloco `_meta.failed` com o mesmo diagnóstico.
+4. Me manda quais fontes falharam (se alguma) que eu ajusto a URL — é edição de
+   1 linha na lista `SOURCES` do `fetch_feeds.py`.
+
+A partir daí, o cron roda sozinho todo dia às ~04:15 BRT, antes do briefing.
+
+## Último passo
+
+Depois do repo no ar e do primeiro `feeds.json` gerado, me passe o
+`<SEU_USUARIO>/briefing-feeds` que eu ajusto o skill do briefing para ler de
+`https://raw.githubusercontent.com/<SEU_USUARIO>/briefing-feeds/main/feeds.json`
+(conforme o `BRIEFING_INTEGRATION.md`).
