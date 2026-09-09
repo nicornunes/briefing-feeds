@@ -1,0 +1,49 @@
+# briefing-feeds
+
+Camada de coleta de notícias para o **Morning Briefing** diário (05h BRT).
+
+## Por que isso existe
+
+O briefing roda num ambiente com restrição de acesso à web: RSS não funciona,
+`curl`/`wget` são bloqueados e o `web_fetch` só aceita URLs que vieram de uma
+busca. Isso causava mirrors defasados, cache velho e dependência da sorte da
+WebSearch.
+
+Este repositório move a **coleta** para o GitHub Actions, que tem internet
+liberada. Um workflow agendado busca os feeds, gera um `feeds.json` fresco e faz
+commit dele no repo. O briefing então **lê o `feeds.json`** como fonte primária
+datada, com fallback para o caminho antigo de WebSearch.
+
+## Como funciona
+
+1. `fetch_feeds.py` — busca cada feed em `SOURCES`, normaliza para um schema
+   comum (`source, section, title, url, summary, published_iso, fetched_iso`),
+   deduplica por URL, ordena do mais novo para o mais antigo, limita por fonte e
+   grava `feeds.json`. Um bloco `_meta` lista quais feeds funcionaram e quais
+   falharam (com o erro), sem nunca derrubar a execução.
+2. `.github/workflows/briefing-feeds.yml` — cron às **07:15 UTC (~04:15 BRT)**,
+   ~45 min antes do briefing (08:00 UTC / 05:00 BRT), com folga contra atraso do
+   cron. Também aceita execução manual (`workflow_dispatch`). Faz commit do
+   `feeds.json` só se ele mudou.
+
+## Como o briefing consome
+
+Depois do primeiro push, o `feeds.json` fica acessível na URL raw:
+
+```
+https://raw.githubusercontent.com/<usuario>/<repo>/main/feeds.json
+```
+
+Veja `BRIEFING_INTEGRATION.md` para o wiring seção a seção.
+
+## Como adicionar/remover uma fonte
+
+Edite a lista `SOURCES` no topo de `fetch_feeds.py`. Cada item é
+`{"id", "section", "url"}`. Trocar uma URL que morreu é edição de 1 linha — o
+`_meta.failed` do `feeds.json` diz exatamente qual precisa de ajuste.
+
+## Limitação honesta
+
+Isto cobre **apenas RSS/headlines gratuitos**. Conteúdo com paywall
+(FT, Bloomberg, WSJ full-text) **não** é coberto — e continua no caminho da
+WebSearch, pegando o que Reuters/Bloomberg liberam via Yahoo/Investing.
