@@ -1,0 +1,48 @@
+# Integração com o skill do Morning Briefing
+
+Objetivo: no run das 05h, cada seção de notícias tenta **primeiro** ler o
+`feeds.json` já commitado (fonte datada e confiável) e só cai para a cascata
+atual de WebSearch se o feed daquela seção estiver vazio/velho.
+
+## 1. Fonte primária
+
+No começo do run, busque uma vez:
+
+```
+https://raw.githubusercontent.com/<usuario>/<repo>/main/feeds.json
+```
+
+Como o `web_fetch` do ambiente só aceita URLs vindas de uma WebSearch, faça uma
+WebSearch por `raw.githubusercontent.com <usuario> <repo> feeds.json` para
+"desbloquear" a URL e então faça o fetch. Se o ambiente permitir fetch direto da
+raw URL, melhor ainda.
+
+Cheque o `_meta.generated_iso`: se for de hoje (dentro de ~2h do run), use o
+`feeds.json` como primário. Se estiver velho (Action não rodou), pule direto
+para a cascata WebSearch atual e anote no output.
+
+## 2. Mapa seção → campo `section`
+
+| Seção do briefing | filtro `item.section` |
+|---|---|
+| 1. Brasil — Valor / mercado | `brasil_mercado` (source `valor`, `infomoney`, `exame_economia`) |
+| 2. Mundo | `mundo` (source `investing`, `yahoo_finance`) |
+| 3. Mercados & Oficiais | `oficiais` (source `fed`, `fazenda`, `cvm`, `ecb`, `world_bank`) |
+| 4. Empresas & Asset Managers | `brasil_mercado` + `mundo` (filtrar por tema) |
+| 7. Brasil Geral & Mundo | `brasil_geral` (source `cnn_brasil`, `g1`) |
+
+Snapshot de preços da seção 3 **continua** na WebSearch/Investing — RSS não traz
+cotação. A guarda anti-cache-defasado segue valendo para números.
+
+## 3. Regra de recência
+
+Cada item traz `published_iso` (UTC). Filtre para as últimas 24-48h como hoje.
+Se após o filtro a seção ficar vazia, use a cascata WebSearch e sinalize
+"sem item fresco no feed".
+
+## 4. Fallback (inalterado)
+
+Se o `feeds.json` estiver ausente, velho, ou o `_meta.failed` listar a fonte
+daquela seção, use exatamente a cascata de fontes que o skill já documenta hoje.
+O `feeds.json` é um acelerador/estabilizador, não um substituto do julgamento
+editorial nem da guarda anti-cache.
