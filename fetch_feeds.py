@@ -1,4 +1,4 @@
-/usr/bin/env python3
+
 """
 fetch_feeds.py — coletor de feeds para o Morning Briefing.
 
