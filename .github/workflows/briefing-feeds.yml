@@ -2,7 +2,7 @@ name: briefing-feeds
 
 on:
   schedule:
-    - cron: "15 7 * * *"
+    - cron: "    - cron: "15 */3 * * *"
   workflow_dispatch:
 
 permissions:
