@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python3
 """
 fetch_feeds.py — coletor de feeds para o Morning Briefing.
 
@@ -42,18 +42,26 @@ SOURCES = [
     # Brasil — mercado
     {"id": "valor",        "section": "brasil_mercado", "url": "https://pox.globo.com/rss/valor"},
     {"id": "infomoney",    "section": "brasil_mercado", "url": "https://www.infomoney.com.br/feed/"},
-    {"id": "exame_economia","section": "brasil_mercado","url": "https://exame.com/feed/"},
+    {"id": "exame_economia","section": "brasil_mercado","url": "https://exame.com/economia/feed/"},
     # Brasil geral & mundo
     {"id": "cnn_brasil",   "section": "brasil_geral",   "url": "https://www.cnnbrasil.com.br/feed/"},
     {"id": "g1",           "section": "brasil_geral",   "url": "https://g1.globo.com/rss/g1/"},
-    # Mundo / mercados
+    # Mundo / mercados (agregadores)
     {"id": "investing",    "section": "mundo",          "url": "https://www.investing.com/rss/news.rss"},
     {"id": "yahoo_finance","section": "mundo",          "url": "https://finance.yahoo.com/news/rssindex"},
+    # Mundo / imprensa premium — RSS de MANCHETES é publico (o corpo do artigo e que
+    # tem paywall). Roda so no GitHub Actions (internet liberada). Bloomberg costuma
+    # bloquear IP de nuvem (pode cair em _meta.failed com 403) — mantido como candidato.
+    {"id": "ft",           "section": "mundo",          "url": "https://www.ft.com/rss/home"},
+    {"id": "wsj_markets",  "section": "mundo",          "url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"},
+    {"id": "economist_fin","section": "mundo",          "url": "https://www.economist.com/finance-and-economics/rss.xml"},
+    {"id": "bloomberg_mkt","section": "mundo",          "url": "https://feeds.bloomberg.com/markets/news.rss"},
     # Oficiais
-    {"id": "fed",          "section": "oficiais",       "url": "https://www.federalreserve.gov/feeds/press_all.xml"},
+    {"id": "fed",          "section": "oficiais",       "url": "https://www.federalreserve.gov/feeds/press_monetary.xml"},
+    {"id": "fazenda",      "section": "oficiais",       "url": "https://www.gov.br/fazenda/pt-br/assuntos/noticias/RSS"},
     {"id": "cvm",          "section": "oficiais",       "url": "https://www.gov.br/cvm/pt-br/assuntos/noticias/RSS"},
     {"id": "ecb",          "section": "oficiais",       "url": "https://www.ecb.europa.eu/rss/press.html"},
-    {"id": "world_bank",   "section": "oficiais",       "url": "https://www.worldbank.org/en/news/all?format=rss"},
+    {"id": "world_bank",   "section": "oficiais",       "url": "https://www.worldbank.org/en/news/all.rss"},
 ]
 
 PER_SOURCE_CAP = 30
